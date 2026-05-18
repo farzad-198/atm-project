@@ -15,7 +15,7 @@ $stmt = $pdo->prepare("
 ");
 
 $stmt->execute(['Admin User', '405198286421', $adminPin, 'admin']);
-$stmt->execute(['John Doe', '123', $userPin, 'user']);
+$stmt->execute(['John Doe', '428613759204', $userPin, 'user']);
 $userOneId = $pdo->lastInsertId();
 
 $stmt->execute(['Emma Johnson', '436158613451', $userPin, 'user']);
