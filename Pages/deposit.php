@@ -54,7 +54,7 @@ $csrfToken = generate_csrf_token();
 <head>
     <meta charset="UTF-8">
     <title>Deposit</title>
-    <link rel="stylesheet" href="../Style.css">
+    <link rel="stylesheet" href="/atm-project/style.css">
 </head>
 <body>
 
@@ -87,7 +87,7 @@ $csrfToken = generate_csrf_token();
         <button type="submit">Deposit</button>
     </form>
 
-    <p>
+    <p class="links">
         <a href="dashboard.php">Back to dashboard</a>
     </p>
 </div>

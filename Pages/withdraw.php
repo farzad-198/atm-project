@@ -56,7 +56,7 @@ $csrfToken = generate_csrf_token();
 <head>
     <meta charset="UTF-8">
     <title>Withdraw</title>
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="/atm-project/style.css">
 </head>
 <body>
 

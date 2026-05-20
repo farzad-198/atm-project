@@ -18,7 +18,7 @@ $accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <title>Dashboard</title>
-    <link rel="stylesheet" href="../src/style.css">
+    <link rel="stylesheet" href="/atm-project/style.css">
 </head>
 <body>
 
@@ -41,7 +41,7 @@ $accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php endforeach; ?>
     </table>
 
-    <p>
+    <p class="links">
         <a href="deposit.php">Deposit</a> |
         <a href="withdraw.php">Withdraw</a> |
         <a href="transfer.php">Transfer</a> |
