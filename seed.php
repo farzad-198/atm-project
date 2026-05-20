@@ -1,6 +1,6 @@
 <?php
 
-require_once 'db.php';
+require_once 'src/db.php';
 
 $pdo->exec("DELETE FROM transactions");
 $pdo->exec("DELETE FROM accounts");

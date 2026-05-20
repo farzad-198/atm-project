@@ -55,3 +55,7 @@ th, td {
 a {
     color: #0066cc;
 }
+.success {
+    color: green;
+    text-align: center;
+}

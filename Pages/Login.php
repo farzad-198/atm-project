@@ -2,8 +2,8 @@
 
 session_start();
 
-require_once 'db.php';
-require_once 'functions.php';
+require_once '../src/db.php';
+require_once '../src/functions.php';
 
 $error = '';
 
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>ATM Login</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../src/style.css">
 </head>
 <body>
 
