@@ -30,17 +30,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (!$account) {
             $error = 'Account not found';
+        } elseif ($account['balance'] < $amount) {
+            $error = 'Not enough balance';
         } else {
-            $stmt = $pdo->prepare("UPDATE accounts SET balance = balance + ? WHERE id = ?");
+            $stmt = $pdo->prepare("UPDATE accounts SET balance = balance - ? WHERE id = ?");
             $stmt->execute([$amount, $accountId]);
 
             $stmt = $pdo->prepare("
                 INSERT INTO transactions (type, amount, from_account_id, to_account_id)
-                VALUES ('deposit', ?, NULL, ?)
+                VALUES ('withdraw', ?, ?, NULL)
             ");
             $stmt->execute([$amount, $accountId]);
 
-            $message = 'Money deposited successfully';
+            $message = 'Money withdrawn successfully';
         }
     }
 }
@@ -53,13 +55,13 @@ $csrfToken = generate_csrf_token();
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Deposit</title>
-    <link rel="stylesheet" href="../Style.css">
+    <title>Withdraw</title>
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
 
 <div class="container">
-    <h1>Deposit Money</h1>
+    <h1>Withdraw Money</h1>
 
     <?php if ($message): ?>
         <p class="success"><?= escape($message) ?></p>
@@ -84,7 +86,7 @@ $csrfToken = generate_csrf_token();
         <label>Amount</label>
         <input type="number" name="amount" step="0.01" required>
 
-        <button type="submit">Deposit</button>
+        <button type="submit">Withdraw</button>
     </form>
 
     <p>

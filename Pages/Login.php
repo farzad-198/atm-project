@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>ATM Login</title>
-    <link rel="stylesheet" href="../src/style.css">
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
 
