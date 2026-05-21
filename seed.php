@@ -26,10 +26,10 @@ $stmt = $pdo->prepare("
     VALUES (?, ?, ?)
 ");
 
-$stmt->execute([$userOneId, 'Checking', 3000]);
-$stmt->execute([$userOneId, 'Savings', 7000]);
+$stmt->execute([$userOneId, 'Swedbank', 3000]);
+$stmt->execute([$userOneId, 'Resurs bank', 7000]);
 
-$stmt->execute([$userTwoId, 'Checking', 5000]);
-$stmt->execute([$userTwoId, 'Savings', 10000]);
+$stmt->execute([$userTwoId, 'Swedbank', 5000]);
+$stmt->execute([$userTwoId, 'Resurs bank', 10000]);
 
 echo "Seed data created successfully.";
