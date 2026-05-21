@@ -110,6 +110,7 @@ $csrfToken = generate_csrf_token();
         <input type="number" name="amount" step="0.01" required>
 
         <button type="submit">Transfer</button>
+
     </form>
 
     <p class="links">
