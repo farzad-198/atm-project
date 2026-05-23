@@ -4,12 +4,12 @@ session_start();
 
 require_once '../src/db.php';
 require_once '../src/functions.php';
+require_once '../src/AccountRepository.php';
 
 require_login();
 
-$stmt = $pdo->prepare("SELECT * FROM accounts WHERE user_id = ?");
-$stmt->execute([$_SESSION['user_id']]);
-$accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$accountRepository = new AccountRepository($pdo);
+$accounts = $accountRepository->getAccountsByUserId($_SESSION['user_id']);
 
 ?>
 
