@@ -4,15 +4,18 @@ session_start();
 
 require_once '../src/db.php';
 require_once '../src/functions.php';
+require_once '../src/AccountRepository.php';
+require_once '../src/TransactionRepository.php';
 
 require_login();
 
 $message = '';
 $error = '';
 
-$stmt = $pdo->prepare("SELECT * FROM accounts WHERE user_id = ?");
-$stmt->execute([$_SESSION['user_id']]);
-$accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$accountRepository = new AccountRepository($pdo);
+$transactionRepository = new TransactionRepository($pdo);
+
+$accounts = $accountRepository->getAccountsByUserId($_SESSION['user_id']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $csrfToken = $_POST['csrf_token'] ?? '';
@@ -24,25 +27,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($amount <= 0) {
         $error = 'Amount must be more than zero';
     } else {
-        $stmt = $pdo->prepare("SELECT * FROM accounts WHERE id = ? AND user_id = ?");
-        $stmt->execute([$accountId, $_SESSION['user_id']]);
-        $account = $stmt->fetch(PDO::FETCH_ASSOC);
+      $account = $accountRepository->findUserAccountById($accountId, $_SESSION['user_id']);
 
         if (!$account) {
             $error = 'Account not found';
         } elseif ($account['balance'] < $amount) {
             $error = 'Not enough balance';
         } else {
-            $stmt = $pdo->prepare("UPDATE accounts SET balance = balance - ? WHERE id = ?");
-            $stmt->execute([$amount, $accountId]);
-
-            $stmt = $pdo->prepare("
-                INSERT INTO transactions (type, amount, from_account_id, to_account_id)
-                VALUES ('withdraw', ?, ?, NULL)
-            ");
-            $stmt->execute([$amount, $accountId]);
+          $accountRepository->withdraw($accountId, $amount);
+          $transactionRepository->createWithdraw($amount, $accountId);
 
             $message = 'Money withdrawn successfully';
+            $accounts = $accountRepository->getAccountsByUserId($_SESSION['user_id']);
         }
     }
 }
