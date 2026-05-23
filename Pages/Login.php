@@ -4,6 +4,7 @@ session_start();
 
 require_once '../src/db.php';
 require_once '../src/functions.php';
+require_once '../src/UserRepository.php';
 
 $error = '';
 
@@ -11,9 +12,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cardNumber = $_POST['card_number'] ?? '';
     $pin = $_POST['pin'] ?? '';
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE card_number = ?");
-    $stmt->execute([$cardNumber]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    $userRepository = new UserRepository($pdo);
+    $user = $userRepository->findByCardNumber($cardNumber);
+   
 
     if ($user && password_verify($pin, $user['pin_hash'])) {
         session_regenerate_id(true);
