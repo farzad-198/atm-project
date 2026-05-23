@@ -4,12 +4,13 @@ session_start();
 
 require_once '../src/db.php';
 require_once '../src/functions.php';
+require_once '../src/UserRepository.php';
 
 require_login();
 require_admin();
 
-$stmt = $pdo->query("SELECT id, name, card_number, role, created_at FROM users");
-$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$userRepository = new UserRepository($pdo);
+$users = $userRepository->getAllUsers();
 
 ?>
 
