@@ -4,15 +4,18 @@ session_start();
 
 require_once '../src/db.php';
 require_once '../src/functions.php';
+require_once '../src/AccountRepository.php';
+require_once '../src/TransactionRepository.php';
 
 require_login();
 
 $message = '';
 $error = '';
 
-$stmt = $pdo->prepare("SELECT * FROM accounts WHERE user_id = ?");
-$stmt->execute([$_SESSION['user_id']]);
-$accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$accountRepository = new AccountRepository($pdo);
+$transactionRepository = new TransactionRepository($pdo);
+
+$accounts = $accountRepository->getAccountsByUserId($_SESSION['user_id']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $csrfToken = $_POST['csrf_token'] ?? '';
@@ -24,39 +27,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Invalid form token';
     } elseif ($amount <= 0) {
         $error = 'Amount must be more than zero';
-    } elseif ($fromAccountId == $toAccountId) {
+    } elseif ($fromAccountId === $toAccountId) {
         $error = 'You cannot transfer to the same account';
     } else {
-        $stmt = $pdo->prepare("SELECT * FROM accounts WHERE id = ? AND user_id = ?");
-        $stmt->execute([$fromAccountId, $_SESSION['user_id']]);
-        $fromAccount = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        $stmt = $pdo->prepare("SELECT * FROM accounts WHERE id = ? AND user_id = ?");
-        $stmt->execute([$toAccountId, $_SESSION['user_id']]);
-        $toAccount = $stmt->fetch(PDO::FETCH_ASSOC);
+        $fromAccount = $accountRepository->findUserAccountById($fromAccountId, $_SESSION['user_id']);
+        $toAccount = $accountRepository->findUserAccountById($toAccountId, $_SESSION['user_id']);
 
         if (!$fromAccount || !$toAccount) {
             $error = 'Account not found';
         } elseif ($fromAccount['balance'] < $amount) {
             $error = 'Not enough balance';
         } else {
-            $pdo->beginTransaction();
+            try {
+                $pdo->beginTransaction();
 
-            $stmt = $pdo->prepare("UPDATE accounts SET balance = balance - ? WHERE id = ?");
-            $stmt->execute([$amount, $fromAccountId]);
+                $accountRepository->transfer($fromAccountId, $toAccountId, $amount);
+                $transactionRepository->createTransfer($amount, $fromAccountId, $toAccountId);
 
-            $stmt = $pdo->prepare("UPDATE accounts SET balance = balance + ? WHERE id = ?");
-            $stmt->execute([$amount, $toAccountId]);
+                $pdo->commit();
 
-            $stmt = $pdo->prepare("
-                INSERT INTO transactions (type, amount, from_account_id, to_account_id)
-                VALUES ('transfer', ?, ?, ?)
-            ");
-            $stmt->execute([$amount, $fromAccountId, $toAccountId]);
+                $message = 'Money transferred successfully';
 
-            $pdo->commit();
+                $accounts = $accountRepository->getAccountsByUserId($_SESSION['user_id']);
 
-            $message = 'Money transferred successfully';
+            } catch (Exception $e) {
+                $pdo->rollBack();
+                $error = 'Transfer failed';
+            }
         }
     }
 }
@@ -110,7 +107,6 @@ $csrfToken = generate_csrf_token();
         <input type="number" name="amount" step="0.01" required>
 
         <button type="submit">Transfer</button>
-
     </form>
 
     <p class="links">

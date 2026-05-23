@@ -30,6 +30,13 @@ class AccountRepository {
         $stmt = $this->pdo->prepare("UPDATE accounts SET balance = balance - ? WHERE id = ?");
         $stmt->execute([$amount, $accountId]);
     }
+    public function transfer($fromAccountId, $toAccountId, $amount) {
+    $stmt = $this->pdo->prepare("UPDATE accounts SET balance = balance - ? WHERE id = ?");
+    $stmt->execute([$amount, $fromAccountId]);
+
+    $stmt = $this->pdo->prepare("UPDATE accounts SET balance = balance + ? WHERE id = ?");
+    $stmt->execute([$amount, $toAccountId]);
+}
 
     public function getAllAccountsWithOwner() {
         $stmt = $this->pdo->query("
