@@ -4,16 +4,13 @@ session_start();
 
 require_once '../src/db.php';
 require_once '../src/functions.php';
+require_once '../src/AccountRepository.php';
 
 require_login();
 require_admin();
 
-$stmt = $pdo->query("
-    SELECT accounts.id, users.name, accounts.account_type, accounts.balance
-    FROM accounts
-    JOIN users ON accounts.user_id = users.id
-");
-$accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$accountRepository = new AccountRepository($pdo);
+$accounts = $accountRepository->getAllAccountsWithOwner();
 
 ?>
 
