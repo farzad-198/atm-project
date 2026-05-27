@@ -1,27 +1,68 @@
-ATM Project
 # ATM Project
 
 Det här är ett enkelt ATM/bankomat-projekt gjort med PHP och MySQL.
 
 Projektet har inloggning, konton, insättning, uttag, överföring och en enkel admin-sida.
 
-## Starta projektet
+## Tekniker
 
-1. Lägg projektmappen i Laragon:
+- PHP
+- MySQL / MariaDB
+- PDO
+- HTML
+- CSS
+- XAMPP eller Laragon
 
-   C:\laragon\www\atm-project
+## Starta projektet med XAMPP
 
-2. Starta Laragon.
+1. Lägg projektmappen här:
 
-3. Kör `database.sql` i databasen.
+   C:\xampp\htdocs\atm-project
 
-4. Kör seed-filen i webbläsaren:
+2. Starta XAMPP.
 
-   http://localhost/atm-project/seed.php
+3. Starta:
 
-5. Öppna login-sidan:
+   - Apache
+   - MySQL
 
-   http://localhost/atm-project/pages/login.php
+4. Öppna phpMyAdmin:
+
+   http://localhost/phpmyadmin
+
+## Skapa databasen
+
+1. Skapa en ny databas i phpMyAdmin med namnet:
+
+   atm_project
+
+2. Klicka på databasen `atm_project`.
+
+3. Gå till fliken `SQL`.
+
+4. Kör innehållet från filen `database.sql`.
+
+Filen skapar tabellerna:
+
+- users
+- accounts
+- transactions
+
+## Skapa testdata
+
+Efter att databasen och tabellerna är skapade, kör seed-filen en gång i webbläsaren:
+
+http://localhost/atm-project/seed.php
+
+Om det fungerar visas:
+
+Seed data created successfully.
+
+## Login
+
+Öppna login-sidan här:
+
+http://localhost/atm-project/pages/login.php
 
 ## Testkonton
 
@@ -58,27 +99,3 @@ Admin kan se användare, konton och transaktioner.
 - Admin kan se användare, konton och transaktioner
 - Formulär använder CSRF-token
 - Databasfrågor använder PDO och prepared statements
-
-## Tekniker
-
-- PHP
-- MySQL
-- PDO
-- HTML
-- CSS
-- Laragon
-
-
-## Repository-klasser
-
-Jag använder enkla repository-klasser för databaslogiken.
-
-- `UserRepository.php` används för användare
-- `AccountRepository.php` används för konton
-- `TransactionRepository.php` används för transaktioner
-
-På så sätt ligger SQL-frågorna mest i `src` och inte direkt i sidfilerna.
-
-## Kommentar
-
-Jag har fokuserat på att få de grundläggande funktionerna att fungera och hålla koden enkel.Sattsar G_nivå
