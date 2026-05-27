@@ -57,7 +57,39 @@ http://localhost/atm-project/seed.php
 Om det fungerar visas:
 
 Seed data created successfully.
+## Starta projektet med Laragon
 
+1. Lägg projektmappen här:
+
+   C:\laragon\www\atm-project
+
+2. Starta Laragon.
+
+3. Starta MySQL och Apache/Nginx.
+
+4. Öppna HeidiSQL från Laragon.
+
+5. Kör filen `database.sql`.
+
+Filen skapar databasen:
+
+   atm_project
+
+och tabellerna:
+
+- users
+- accounts
+- transactions
+
+Om databasen redan finns kan man också välja databasen `atm_project` och köra SQL-koden där.
+
+Efter det körs seed-filen en gång:
+
+http://localhost/atm-project/seed.php
+
+Login-sidan:
+
+http://localhost/atm-project/pages/login.php
 ## Login
 
 Öppna login-sidan här:
