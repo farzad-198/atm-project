@@ -1,14 +1,10 @@
-IF DB_ID(N'atm_project') IS NULL
-    CREATE DATABASE atm_project;
-GO
-
+CREATE DATABASE IF NOT EXISTS atm_project;
 USE atm_project;
-GO
 
 DROP TABLE IF EXISTS transactions;
 DROP TABLE IF EXISTS accounts;
 DROP TABLE IF EXISTS users;
-GO
+
 
 CREATE TABLE users (
     id INT IDENTITY(1,1) PRIMARY KEY,
